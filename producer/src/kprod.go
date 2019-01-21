@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	kafkaBroker = "10.129.212.255:31090"
-	topic       = "dupa"
+	kafkaBroker = "10.156.54.204:9092"
+	topic       = "grendach"
 )
 
 func main() {
