@@ -9,10 +9,12 @@ import (
 	"time"
 )
 
-const (
-	zookeeperConn = "10.156.54.204:2181"
-	cgroup        = "zgroup"
-	topic         = "grendach"
+var (
+	group         = os.Getenv("KAFKA_GROUP")
+	topic         = os.Getenv("KAFKA_TOPIC")
+	zookeeperHost = os.Getenv("ZOOKEEPER_HOST")
+	zookeeperPort = os.Getenv("ZOOKEEPER_PORT")
+	zookeeperURI = zookeeperHost + ":" + zookeeperPort
 )
 
 func initConsumer() (*consumergroup.ConsumerGroup, error) {
@@ -22,7 +24,24 @@ func initConsumer() (*consumergroup.ConsumerGroup, error) {
 	config.Offsets.ProcessingTimeout = 10 * time.Second
 
 	// join to consumer group
-	cg, err := consumergroup.JoinConsumerGroup(cgroup, []string{topic}, []string{zookeeperConn}, config)
+	cg, err := consumergroup.JoinConsumerGroup(group, []string{topic}, []string{zookeeperURI}, config)
+
+	if group == "" {
+		fmt.Println("!!! <KAFKA_GROUP> variable is not assigned.")
+	}
+
+	if topic == "" {
+		fmt.Println("!!! <KAFKA_TOPIC> variable is not assigned.")
+	}
+
+	if zookeeperHost == "" {
+		fmt.Println("!!! <ZOOKEEPER_HOST> variable is not assigned.")
+	}
+
+	if zookeeperPort == "" {
+		fmt.Println("!!! <ZOOKEEPER_PORT> variable is not assigned.")
+	}
+
 	if err != nil {
 		return nil, err
 	}

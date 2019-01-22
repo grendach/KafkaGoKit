@@ -1,3 +1,10 @@
+#Kafka GO-Kit
+
+This repo contain Kafka producer and consumer created in Golang.
+
+You can run Kafka as Docker images on your environment(Cloud or local machine)
+
+
 
 ## Set up Kafka on Docker
 

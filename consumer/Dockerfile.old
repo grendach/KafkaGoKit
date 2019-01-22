@@ -6,6 +6,11 @@ MAINTAINER Dmytro Grendach (grendach@gmail.com)
 RUN go get github.com/Shopify/sarama
 RUN go get github.com/wvanbergen/kafka/consumergroup
 
+# env
+ENV ZOOKEEPER_HOST 10.156.54.204
+ENV ZOOKEEPER_PORT 2181
+ENV KAFKA_TOPIC greg
+ENV KAFKA_GROUP zgroup
 
 #copy app
 ADD src/kcons.go /go/src
