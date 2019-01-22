@@ -1,21 +1,15 @@
-FROM golang:1.10.4
+FROM golang:latest
 
 MAINTAINER Dmytro Grendach (grendach@gmail.com)
 
-#install dependencies
-
+# install dependencies
 RUN go get github.com/Shopify/sarama
 
-#environment
-ENV KAFKA_HOST dev.locahost
-ENV KAFKA_PORT 9092
-ENV KAFKA_TOPIC grendach
+#copy app
+ADD src/kprod.go /go/src
 
-ADD . /app
-WORKDIR /app
+# build
+RUN go build -o /go/bin/kprod /go/src/kprod.go
+RUN chmod +x /go/bin/kprod
 
-#build producer
-RUN go build -o producer src/*.go
-
-
-#ENTRYPOINT ["/app/docker-enrypoint.sh"]
+ENTRYPOINT [ "/go/bin/kprod" ]

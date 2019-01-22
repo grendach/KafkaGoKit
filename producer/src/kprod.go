@@ -8,14 +8,29 @@ import (
 	"os"
 )
 
-const (
-	kafkaBroker = "10.156.54.204:9092"
-	topic       = "grendach"
+var (
+	kafkaHost  = os.Getenv("KAFKA_HOST")
+	kafkaPort  = os.Getenv("KAFKA_PORT")
+	kafkaTopic = os.Getenv("KAFKA_TOPIC")
+	kafkaURI   = kafkaHost + ":" + kafkaPort
 )
 
 func main() {
 	// create producer
 	producer, err := initProducer()
+
+	if kafkaTopic == "" {
+		fmt.Println("!!! <KAFKA_TOPIC> variable is not assigned.")
+	}
+
+	if kafkaHost == "" {
+		fmt.Println("!!! <KAFKA_HOST> variable is not assigned.")
+	}
+
+	if kafkaPort == "" {
+		fmt.Println("!!! <KAFKA_PORT> variable is not assigned.")
+	}
+
 	if err != nil {
 		fmt.Println("Error producer: ", err.Error())
 		os.Exit(1)
@@ -49,7 +64,7 @@ func initProducer() (sarama.SyncProducer, error) {
 	// prd, err := sarama.NewAsyncProducer([]string{kafkaBroker}, config)
 
 	// sync producer
-	prd, err := sarama.NewSyncProducer([]string{kafkaBroker}, config)
+	prd, err := sarama.NewSyncProducer([]string{kafkaURI}, config)
 
 	return prd, err
 }
@@ -57,7 +72,7 @@ func initProducer() (sarama.SyncProducer, error) {
 func publish(message string, producer sarama.SyncProducer) {
 	// public sync
 	msg := &sarama.ProducerMessage{
-		Topic: topic,
+		Topic: kafkaTopic,
 		Value: sarama.StringEncoder(message),
 	}
 	p, o, err := producer.SendMessage(msg)

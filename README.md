@@ -1,9 +1,8 @@
 #Kafka GO-Kit
 
-This repo contain Kafka producer and consumer created in Golang.
+Run Kafka and Zookeeper as Docker images on your local or any other environment.
 
-You can run Kafka as Docker images on your environment(Cloud or local machine)
-
+Also you can build and use as a separate container [producer](producer/README.md) and [consumer](consumer/README.md) which are created in Golang
 
 
 ## Set up Kafka on Docker
@@ -11,22 +10,13 @@ You can run Kafka as Docker images on your environment(Cloud or local machine)
 1. Run Zookeeper:
 
 ```sh
-docker run -d \
---name zookeeper \
--p 2181:2181 \
-jplock/zookeeper
+$ docker run -d --name zookeeper -p 2181:2181 jplock/zookeeper
 ```
 
 2. Run Kafka:
 
 ```sh
-docker run -d \
---name kafka \
--p 7203:7203 \
--p 9092:9092 \
--e KAFKA_ADVERTISED_HOST_NAME=<IP_ADDRESS> \
--e ZOOKEEPER_IP=<IP_ADDRESS> \
-ches/kafka
+$ docker run -d --name kafka -p 7203:7203 -p 9092:9092 -e KAFKA_ADVERTISED_HOST_NAME=<IP_ADDRESS> -e ZOOKEEPER_IP=<IP_ADDRESS> ches/kafka
 ```
 
 KAFKA_ADVERTISED_HOST_NAME is the IP address of the machine(my local machine) which Kafka container running. ZOOKEEPER_IP is the Zookeeper container running machines IP.
@@ -118,3 +108,5 @@ ls /consumers
 ```sh
 ls /consumers/console-consumer-1532/owners
 ```
+
+Above material partially taken from [λ.eranga](https://medium.com/@itseranga) Medium articles.
